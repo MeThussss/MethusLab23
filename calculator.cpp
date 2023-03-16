@@ -1,9 +1,54 @@
 #include <windows.h>
+#include <stdio.h>
+
+double N1;
+double N2;
+char t[100];
+char text1[100];
+char text2[100];
+
+HWND text, input1,input2,add,subt,divide,mult;
 
 /* This is where all the input to the window goes to */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
 	switch(Message) {
+		case WM_CREATE:
+				text = CreateWindow("STATIC","Please input two number",WS_VISIBLE | WS_CHILD,40,10,170,20,hwnd,NULL,NULL,NULL);
+				input1 = CreateWindow("EDIT","",WS_BORDER|WS_CHILD|WS_VISIBLE,10+68,40,80,30,hwnd,NULL,NULL,NULL);
+				input2 = CreateWindow("EDIT","",WS_BORDER|WS_CHILD|WS_VISIBLE,10+68,75,80,30,hwnd,NULL,NULL,NULL);
+				add = CreateWindow("BUTTON","+",WS_VISIBLE|WS_CHILD|WS_BORDER,5+36,120,30,30,hwnd,(HMENU) 1,NULL,NULL);
+				subt = CreateWindow("BUTTON","-",WS_VISIBLE|WS_CHILD|WS_BORDER,45+36,120,30,30,hwnd,(HMENU) 2,NULL,NULL);
+				mult = CreateWindow("BUTTON","*",WS_VISIBLE|WS_CHILD|WS_BORDER,85+36,120,30,30,hwnd,(HMENU) 3,NULL,NULL);
+				divide = CreateWindow("BUTTON","/",WS_VISIBLE|WS_CHILD|WS_BORDER,125+36,120,30,30,hwnd,(HMENU) 4,NULL,NULL);
+				break; 
 		
+		case WM_COMMAND:
+			GetWindowText(input1,&text1[0],100);
+			GetWindowText(input2,&text2[0],100);
+			N1 = atof(text1);
+			N2 = atof(text2);
+			switch(LOWORD(wParam)){
+					case 1:
+						sprintf(t,"%f",N1+N2);
+						::MessageBeep(MB_ICONERROR);
+						::MessageBox(hwnd,t,"Resault",MB_OK);
+						break;
+					case 2:
+						sprintf(t,"%f,N1-N2");
+						::MessageBeep(MB_ICONERROR);
+						::MessageBox(hwnd,t,"Resault",MB_OK);
+						break;
+					case 3:
+						sprintf(t,"%f",N1*N2);
+						::MessageBeep(MB_ICONERROR);
+						::MessageBox(hwnd,t,"Resault",MB_OK);
+						break;
+					case 4:
+						sprintf(t,"%f",N1/N2);
+						::MessageBeep(MB_ICONERROR);
+						::MessageBox(hwnd,t,"Resault",MB_OK);
+						break;
+			}break;
 		/* Upon destruction, tell the main thread to stop */
 		case WM_DESTROY: {
 			PostQuitMessage(0);
@@ -41,11 +86,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 	}
 
-	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,"WindowClass","Caption",WS_VISIBLE|WS_OVERLAPPEDWINDOW,
+	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,"WindowClass","My Caculator",WS_VISIBLE|WS_SYSMENU,
 		CW_USEDEFAULT, /* x */
 		CW_USEDEFAULT, /* y */
-		640, /* width */
-		480, /* height */
+		250, /* width */
+		200, /* height */
 		NULL,NULL,hInstance,NULL);
 
 	if(hwnd == NULL) {
